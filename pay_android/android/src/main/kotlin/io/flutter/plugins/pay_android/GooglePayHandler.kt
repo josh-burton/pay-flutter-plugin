@@ -128,8 +128,9 @@ class GooglePayHandler(private val activity: Activity) : PluginRegistry.Activity
      *
      * @param result callback to communicate back with the Dart end in Flutter.
      * @param paymentProfileString the payment configuration object in [String] format.
+     * @param existingPaymentMethodRequired whether the user must have an existing payment method.
      */
-    fun isReadyToPay(result: Result, paymentProfileString: String) {
+    fun isReadyToPay(result: Result, paymentProfileString: String, existingPaymentMethodRequired: Boolean = true) {
 
         // Construct profile and client
         val paymentProfile = buildPaymentProfile(
@@ -141,6 +142,8 @@ class GooglePayHandler(private val activity: Activity) : PluginRegistry.Activity
                 "existingPaymentMethodRequired"
             )
         )
+        // Inject existingPaymentMethodRequired into the profile
+        paymentProfile.put("existingPaymentMethodRequired", existingPaymentMethodRequired)
 
         val client = paymentClientForProfile(paymentProfile)
         val rtpRequest = IsReadyToPayRequest.fromJson(paymentProfile.toString())

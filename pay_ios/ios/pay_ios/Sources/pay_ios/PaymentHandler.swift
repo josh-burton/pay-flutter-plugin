@@ -47,10 +47,15 @@ class PaymentHandler: NSObject {
   ///
   /// - parameter paymentConfiguration: A JSON string with the configuration to execute
   ///   this payment.
-  /// - returns: A boolean with the result: whether the use can make payments.
-  func canMakePayments(_ paymentConfiguration: String) -> Bool {
+  /// - parameter existingPaymentMethodRequired: If true, requires a card; if false, only checks device support.
+  /// - returns: A boolean with the result: whether the user can make payments.
+  func canMakePayments(_ paymentConfiguration: String, existingPaymentMethodRequired: Bool = true) -> Bool {
     if let supportedNetworks = PaymentHandler.supportedNetworks(from: paymentConfiguration) {
-      return PKPaymentAuthorizationController.canMakePayments(usingNetworks: supportedNetworks)
+      if existingPaymentMethodRequired {
+        return PKPaymentAuthorizationController.canMakePayments(usingNetworks: supportedNetworks)
+      } else {
+        return PKPaymentAuthorizationController.canMakePayments()
+      }
     } else {
       return false
     }
