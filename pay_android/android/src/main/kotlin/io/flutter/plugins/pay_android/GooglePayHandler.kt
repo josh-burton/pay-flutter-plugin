@@ -122,15 +122,15 @@ class GooglePayHandler(private val activity: Activity) : PluginRegistry.Activity
      *
      * This call checks whether Google Pay is supported for the pair of user and device starting a
      * payment operation. This call does not check whether the user has cards that conform to the
-     * list of supported networks unless `existingPaymentMethodRequired` is included in the
+     * list of supported networks unless `existingPaymentMethodAvailable` is included in the
      * configuration. See the docs for the [`isReadyToPay][https://developers.google.com/android/reference/com/google/android/gms/wallet/PaymentsClient#isReadyToPay(com.google.android.gms.wallet.IsReadyToPayRequest)]
      * call to learn more.`
      *
      * @param result callback to communicate back with the Dart end in Flutter.
      * @param paymentProfileString the payment configuration object in [String] format.
-     * @param existingPaymentMethodRequired whether the user must have an existing payment method.
+     * @param existingPaymentMethodAvailable whether the user must have an existing payment method.
      */
-    fun isReadyToPay(result: Result, paymentProfileString: String, existingPaymentMethodRequired: Boolean = true) {
+    fun isReadyToPay(result: Result, paymentProfileString: String, existingPaymentMethodAvailable: Boolean = false) {
 
         // Construct profile and client
         val paymentProfile = buildPaymentProfile(
@@ -139,11 +139,11 @@ class GooglePayHandler(private val activity: Activity) : PluginRegistry.Activity
                 "apiVersion",
                 "apiVersionMinor",
                 "allowedPaymentMethods",
-                "existingPaymentMethodRequired"
+                "existingPaymentMethodAvailable"
             )
         )
-        // Inject existingPaymentMethodRequired into the profile
-        paymentProfile.put("existingPaymentMethodRequired", existingPaymentMethodRequired)
+        // Inject existingPaymentMethodAvailable into the profile
+        paymentProfile.put("existingPaymentMethodAvailable", existingPaymentMethodAvailable)
 
         val client = paymentClientForProfile(paymentProfile)
         val rtpRequest = IsReadyToPayRequest.fromJson(paymentProfile.toString())

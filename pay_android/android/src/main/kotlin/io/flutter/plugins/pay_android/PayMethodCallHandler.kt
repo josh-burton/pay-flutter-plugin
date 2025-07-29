@@ -78,8 +78,8 @@ class PayMethodCallHandler private constructor(
             METHOD_USER_CAN_PAY -> {
                 val args = call.arguments as? Map<String, Any>
                 val paymentProfileString = args!!["paymentConfiguration"] as String
-                val existingPaymentMethodRequired = args!!["existingPaymentMethodRequired"] as? Boolean ?: true
-                googlePayHandler.isReadyToPay(result, paymentProfileString, existingPaymentMethodRequired)
+                val existingPaymentMethodAvailable = args!!["existingPaymentMethodAvailable"] as? Boolean ?: false
+                googlePayHandler.isReadyToPay(result, paymentProfileString, existingPaymentMethodAvailable)
             }
             METHOD_SHOW_PAYMENT_SELECTOR -> {
                 if (eventChannelIsActive) {
