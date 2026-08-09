@@ -51,9 +51,9 @@ abstract class PayButton extends StatefulWidget {
   /// a user can pay with it and the button loads.
   final Widget? loadingIndicator;
 
-  /// Determines if this button should only when there are payment methods available
-  /// If false, the button will show if the device supports the payment method, regardless of cards.
-  final bool existingPaymentMethodAvailable;
+  /// Whether an existing payment method is required to show this button.
+  /// If false, the button is shown whenever the device supports the payment method.
+  final bool existingPaymentMethodRequired;
 
   /// Initializes the button and the payment client that handles the requests.
   PayButton({
@@ -67,7 +67,7 @@ abstract class PayButton extends StatefulWidget {
     this.onError,
     this.childOnError,
     this.loadingIndicator,
-    this.existingPaymentMethodAvailable = false,
+    this.existingPaymentMethodRequired = false,
   }) : _payClient = Pay({buttonProvider: paymentConfiguration});
 
   /// Determines the list of supported platforms for the button.
@@ -143,7 +143,7 @@ class _PayButtonState extends State<PayButton> {
     try {
       return await widget._payClient.userCanPay(
         widget.buttonProvider,
-        existingPaymentMethodAvailable: widget.existingPaymentMethodAvailable,
+        existingPaymentMethodRequired: widget.existingPaymentMethodRequired,
       );
     } catch (error) {
       widget.onError?.call(error);

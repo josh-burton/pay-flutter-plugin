@@ -48,13 +48,13 @@ class Pay {
   /// makes sure that the [provider] exists and is available in the platform
   /// running the logic.
   ///
-  /// [existingPaymentMethodAvailable]:
-  ///   - If true (default), only returns true if a supported payment method/card is available.
-  ///   - If false, returns true if the device/user supports the payment method, regardless of card/payment method status.
-  Future<bool> userCanPay(PayProvider provider, {bool existingPaymentMethodAvailable = true}) async {
+  /// [existingPaymentMethodRequired]:
+  ///   - If true (default), only returns true if a supported payment method is available.
+  ///   - If false, returns true if the device and user support the payment method, even if none is currently available.
+  Future<bool> userCanPay(PayProvider provider, {bool existingPaymentMethodRequired = true}) async {
     await throwIfProviderIsNotDefined(provider);
     if (supportedProviders[defaultTargetPlatform]!.contains(provider)) {
-      return _payPlatform.userCanPay(_configurations[provider]!, existingPaymentMethodAvailable: existingPaymentMethodAvailable);
+      return _payPlatform.userCanPay(_configurations[provider]!, existingPaymentMethodRequired: existingPaymentMethodRequired);
     }
 
     return Future.value(false);

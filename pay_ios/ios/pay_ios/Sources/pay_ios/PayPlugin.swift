@@ -44,7 +44,7 @@ public class PayPlugin: NSObject, FlutterPlugin {
 
       result(paymentHandler.canMakePayments(
         args["paymentConfiguration"] as! String,
-        existingPaymentMethodAvailable: args["existingPaymentMethodAvailable"] as? Bool ?? false)
+        existingPaymentMethodRequired: args["existingPaymentMethodRequired"] as? Bool ?? false)
       )
     case methodShowPaymentSelector:
       let arguments = call.arguments as! [String: Any]
